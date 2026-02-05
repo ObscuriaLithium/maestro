@@ -1,12 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.obscuria.accents.forge.mixin",
+  "package": "dev.obscuria.maestro.forge.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [
-    "dev.obscuria.badges.forge.mixin.MixinDummy"
-  ],
+  "mixins": [],
   "client": [],
   "server": [],
   "injectors": {

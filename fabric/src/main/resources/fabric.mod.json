@@ -14,7 +14,7 @@
   },
   "license": "${license}",
   "icon": "${mod_id}.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "dev.obscuria.maestro.fabric.FabricMaestro"

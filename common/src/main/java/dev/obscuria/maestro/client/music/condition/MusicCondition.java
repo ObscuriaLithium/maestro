@@ -26,5 +26,6 @@ public interface MusicCondition {
         context.register("biome", () -> BiomeMusicCondition.CODEC);
         context.register("weather", () -> WeatherCondition.CODEC);
         context.register("entity", () -> EntityCondition.CODEC);
+        context.register("screen", () -> ScreenCondition.CODEC);
     }
 }

@@ -1,6 +1,7 @@
 package dev.obscuria.maestro;
 
 import dev.obscuria.maestro.client.registry.MaestroRegistries;
+import dev.obscuria.maestro.config.ClientConfig;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ public final class Maestro {
     }
 
     public static void init() {
+        ClientConfig.init();
         MaestroRegistries.init();
     }
 }
