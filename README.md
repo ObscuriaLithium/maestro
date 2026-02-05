@@ -12,4 +12,4 @@ Maestro is a client-side, data-driven music orchestration framework for Minecraf
 ### Project Pages
 
 - [Curseforge](https://www.curseforge.com/minecraft/mc-mods/maestro)
-- [Modrinth](https://modrinth.com/mod/maestro)
+- [Modrinth](https://modrinth.com/mod/maestro-music)
