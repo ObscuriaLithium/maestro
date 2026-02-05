@@ -1,0 +1,20 @@
+{
+  "priority": 100,
+  "sound_event": "minecraft:music_disc.pigstep",
+  "replace_current_music": true,
+  "min_delay": 0,
+  "max_delay": 0,
+  "condition": {
+    "type": "maestro:all_of",
+    "terms": [
+      {
+        "type": "maestro:weather",
+        "is_raining": true
+      },
+      {
+        "type": "maestro:entity",
+        "entity": "minecraft:witch"
+      }
+    ]
+  }
+}

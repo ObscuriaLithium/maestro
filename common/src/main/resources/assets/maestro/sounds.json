@@ -1,0 +1,9 @@
+{
+  "music.some_music": {
+    "sounds": [
+      { "name": "maestro:music.numa_expandia", "stream": true },
+      { "name": "maestro:music.numa_luzia", "stream": true },
+      { "name": "maestro:music.numa_naima", "stream": true }
+    ]
+  }
+}
