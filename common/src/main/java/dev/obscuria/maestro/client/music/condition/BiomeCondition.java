@@ -15,15 +15,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Stream;
 
-public record BiomeMusicCondition(
+public record BiomeCondition(
         List<TagKey<Biome>> tags,
         List<ResourceLocation> biomes
 ) implements MusicCondition {
 
-    public static final Codec<BiomeMusicCondition> CODEC;
+    public static final Codec<BiomeCondition> CODEC;
 
     @Override
-    public Codec<BiomeMusicCondition> codec() {
+    public Codec<BiomeCondition> codec() {
         return CODEC;
     }
 
@@ -37,8 +37,8 @@ public record BiomeMusicCondition(
 
     private List<ExtraCodecs.TagOrElementLocation> pack() {
         return Stream.concat(
-                tags.stream().map(BiomeMusicCondition::packTag),
-                biomes.stream().map(BiomeMusicCondition::packBiome)).toList();
+                tags.stream().map(BiomeCondition::packTag),
+                biomes.stream().map(BiomeCondition::packBiome)).toList();
     }
 
     private static ExtraCodecs.TagOrElementLocation packTag(TagKey<Biome> tag) {
@@ -49,19 +49,19 @@ public record BiomeMusicCondition(
         return new ExtraCodecs.TagOrElementLocation(biome, false);
     }
 
-    private static BiomeMusicCondition unpack(List<ExtraCodecs.TagOrElementLocation> packed) {
+    private static BiomeCondition unpack(List<ExtraCodecs.TagOrElementLocation> packed) {
         final var tags = Lists.<TagKey<Biome>>newArrayList();
         final var biomes = Lists.<ResourceLocation>newArrayList();
         for (var location : packed) {
             if (location.tag()) tags.add(TagKey.create(Registries.BIOME, location.id()));
             else biomes.add(location.id());
         }
-        return new BiomeMusicCondition(tags, biomes);
+        return new BiomeCondition(tags, biomes);
     }
 
     static {
         CODEC = RecordCodecBuilder.create(codec -> codec.group(
-                ExtraCodecs.TAG_OR_ELEMENT_ID.listOf().fieldOf("biomes").forGetter(BiomeMusicCondition::pack)
-        ).apply(codec, BiomeMusicCondition::unpack));
+                ExtraCodecs.TAG_OR_ELEMENT_ID.listOf().fieldOf("biomes").forGetter(BiomeCondition::pack)
+        ).apply(codec, BiomeCondition::unpack));
     }
 }
