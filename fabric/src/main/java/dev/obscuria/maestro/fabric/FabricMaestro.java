@@ -1,12 +1,12 @@
 package dev.obscuria.maestro.fabric;
 
 import dev.obscuria.maestro.Maestro;
-import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.ModInitializer;
 
-public final class FabricMaestro implements ClientModInitializer {
+public final class FabricMaestro implements ModInitializer {
 
     @Override
-    public void onInitializeClient() {
+    public void onInitialize() {
         Maestro.init();
     }
 }

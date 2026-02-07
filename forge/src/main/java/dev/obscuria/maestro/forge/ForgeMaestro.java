@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 public final class ForgeMaestro {
 
     public ForgeMaestro() {
+        Maestro.init();
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ForgeMaestroClient::init);
     }
 }

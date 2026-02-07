@@ -1,6 +1,6 @@
 package dev.obscuria.maestro.fabric.mixin.client;
 
-import dev.obscuria.maestro.client.registry.MusicManager;
+import dev.obscuria.maestro.client.registry.ResourceManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
@@ -18,6 +18,6 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "<init>", at = @At(value = "NEW", target = "(Lnet/minecraft/client/renderer/texture/TextureManager;)Lnet/minecraft/client/resources/MobEffectTextureManager;"))
     private void init(GameConfig config, CallbackInfo info) {
-        this.resourceManager.registerReloadListener(MusicManager.SHARED);
+        this.resourceManager.registerReloadListener(ResourceManager.SHARED);
     }
 }

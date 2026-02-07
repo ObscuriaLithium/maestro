@@ -10,11 +10,9 @@ import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 
 public record MusicDefinition(
-        ResourceLocation soundEvent,
         int priority,
-        int minDelay,
-        int maxDelay,
-        boolean replaceCurrentMusic,
+        MusicLayerEnum layer,
+        ResourceLocation soundEvent,
         MusicCondition condition
 ) implements Comparable<MusicDefinition> {
 
@@ -27,16 +25,14 @@ public record MusicDefinition(
 
     public Music assemble() {
         var sound = Holder.direct(SoundEvent.createVariableRangeEvent(soundEvent));
-        return new Music(sound, minDelay, maxDelay, replaceCurrentMusic);
+        return new Music(sound, 0, 0, true);
     }
 
     static {
         CODEC = RecordCodecBuilder.create(codec -> codec.group(
-                ResourceLocation.CODEC.fieldOf("sound_event").forGetter(MusicDefinition::soundEvent),
                 Codec.INT.fieldOf("priority").forGetter(MusicDefinition::priority),
-                Codec.INT.optionalFieldOf("min_delay", 1200).forGetter(MusicDefinition::minDelay),
-                Codec.INT.optionalFieldOf("max_delay", 2400).forGetter(MusicDefinition::maxDelay),
-                Codec.BOOL.optionalFieldOf("replace_current_music", false).forGetter(MusicDefinition::replaceCurrentMusic),
+                MusicLayerEnum.CODEC.fieldOf("layer").forGetter(MusicDefinition::layer),
+                ResourceLocation.CODEC.fieldOf("sound_event").forGetter(MusicDefinition::soundEvent),
                 MusicCondition.CODEC.fieldOf("condition").forGetter(MusicDefinition::condition)
         ).apply(codec, MusicDefinition::new));
     }

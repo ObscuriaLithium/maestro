@@ -3,10 +3,7 @@ package dev.obscuria.maestro.client.music.condition;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.CreditsAndAttributionScreen;
-import net.minecraft.client.gui.screens.PauseScreen;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.screens.*;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.player.Player;
@@ -39,7 +36,7 @@ public record ScreenCondition(
 
     public enum ScreenKind implements StringRepresentable {
         TITLE(TitleScreen.class),
-        CREDITS(CreditsAndAttributionScreen.class),
+        CREDITS(WinScreen.class),
         INVENTORY(InventoryScreen.class),
         PAUSE(PauseScreen.class);
 

@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public enum ResourceKind {
 
-    DEFINITION(new Spec<>("definition", "music", MusicDefinition.CODEC, MaestroRegistries.Resource.MUSIC_DEFINITION));
+    DEFINITION(new Spec<>("definition", "music", MusicDefinition.CODEC, MaestroClientRegistries.Resource.MUSIC_DEFINITION));
 
     public final Spec<?> spec;
 

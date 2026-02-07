@@ -14,10 +14,13 @@
   },
   "license": "${license}",
   "icon": "${mod_id}.png",
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
-    "client": [
+    "main": [
       "dev.obscuria.maestro.fabric.FabricMaestro"
+    ],
+    "client": [
+      "dev.obscuria.maestro.fabric.client.FabricMaestroClient"
     ]
   },
   "mixins": [

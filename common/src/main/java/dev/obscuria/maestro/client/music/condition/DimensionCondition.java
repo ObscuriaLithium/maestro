@@ -7,29 +7,26 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-public record BiomeCondition(
-        List<ResourceLocation> values
+public record DimensionCondition(
+        ResourceLocation dimension
 ) implements MusicCondition {
 
-    public static final Codec<BiomeCondition> CODEC;
+    public static final Codec<DimensionCondition> CODEC;
 
     @Override
-    public Codec<BiomeCondition> codec() {
+    public Codec<DimensionCondition> codec() {
         return CODEC;
     }
 
     @Override
     public boolean test(@Nullable Level level, @Nullable Player player) {
         if (level == null || player == null) return false;
-        var holder = level.getBiome(player.blockPosition());
-        return values.contains(holder.unwrapKey().orElseThrow().location());
+        return level.dimension().location().equals(dimension);
     }
 
     static {
         CODEC = RecordCodecBuilder.create(codec -> codec.group(
-                ResourceLocation.CODEC.listOf().fieldOf("values").forGetter(BiomeCondition::values)
-        ).apply(codec, BiomeCondition::new));
+                ResourceLocation.CODEC.fieldOf("dimension").forGetter(DimensionCondition::dimension)
+        ).apply(codec, DimensionCondition::new));
     }
 }

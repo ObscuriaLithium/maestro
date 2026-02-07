@@ -11,7 +11,7 @@ import dev.obscuria.maestro.client.music.condition.MusicCondition;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
-public interface MaestroRegistries {
+public interface MaestroClientRegistries {
 
     Registrar REGISTRAR = FragmentumRegistry.registrar(Maestro.MODID);
 

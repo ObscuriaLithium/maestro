@@ -5,18 +5,17 @@ import dev.obscuria.maestro.Maestro;
 import dev.obscuria.maestro.client.music.MusicCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.apache.commons.lang3.StringUtils;
 
-public final class MusicManager implements ResourceManagerReloadListener {
+public final class ResourceManager implements ResourceManagerReloadListener {
 
-    public static final MusicManager SHARED = new MusicManager();
+    public static final ResourceManager SHARED = new ResourceManager();
 
-    private MusicManager() {}
+    private ResourceManager() {}
 
     @Override
-    public void onResourceManagerReload(ResourceManager manager) {
+    public void onResourceManagerReload(net.minecraft.server.packs.resources.ResourceManager manager) {
         MusicCache.clear();
         for (var kind : ResourceKind.values()) {
             kind.spec.onReloadStart();
