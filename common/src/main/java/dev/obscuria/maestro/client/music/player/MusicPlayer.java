@@ -12,38 +12,55 @@ import org.jetbrains.annotations.Nullable;
 
 public final class MusicPlayer extends MusicManager {
 
+    private static final int REEVALUATE_INTERVAL_TICKS = 20;
+
     private final Minecraft client;
-    private final MusicLayer layerEncounter;
-    private final MusicLayer layerUnderscore;
+    private final MusicLayer layerEncounter = new MusicLayer();
+    private final MusicLayer layerUnderscore = new MusicLayer();
+
+    private int tickCount;
 
     public MusicPlayer(Minecraft client) {
         super(client);
         this.client = client;
-        this.layerEncounter = new MusicLayer();
-        this.layerUnderscore = new MusicLayer();
     }
 
     @Override
     public void tick() {
-        for (var track : MusicCache.allTracks()) track.setSuppressed(false);
-        this.layerEncounter.setTrack(evaluate(MusicLayerEnum.ENCOUNTER));
-        this.layerUnderscore.setTrack(evaluate(MusicLayerEnum.UNDERSCORE));
-        this.layerEncounter.tick(false);
-        this.layerUnderscore.tick(layerEncounter.isPlaying());
-        for (var track : MusicCache.allTracks()) track.tick();
+        tickCount += 1;
+
+        for (var track : MusicCache.allTracks()) {
+            track.clearSuppression();
+        }
+
+        if (tickCount % REEVALUATE_INTERVAL_TICKS == 0) {
+            layerEncounter.select(resolveTrack(MusicLayerEnum.ENCOUNTER));
+            layerUnderscore.select(resolveTrack(MusicLayerEnum.UNDERSCORE));
+        }
+
+        layerEncounter.tick(false);
+        layerUnderscore.tick(layerEncounter.isActive());
+
+        for (var track : MusicCache.allTracks()) {
+            track.onPlayerTick();
+        }
     }
 
     @Override
-    public void startPlaying(Music music) {}
+    public void startPlaying(Music music) {
+        // Ignored
+    }
 
     @Override
     public void stopPlaying(Music music) {
-        MusicCache.getTrack(music).kill();
+        MusicCache.getTrack(music).stop(MusicStopReason.MANUAL);
     }
 
     @Override
     public void stopPlaying() {
-        MusicCache.allTracks().forEach(MusicTrack::kill);
+        for (var track : MusicCache.allTracks()) {
+            track.stop(MusicStopReason.SYSTEM);
+        }
     }
 
     @Override
@@ -52,19 +69,21 @@ public final class MusicPlayer extends MusicManager {
         return MusicCache.getTrack(music).isPlaying();
     }
 
-    private @Nullable MusicTrack evaluate(MusicLayerEnum layer) {
+    private @Nullable MusicTrack resolveTrack(MusicLayerEnum layer) {
         if (ClientConfig.isMaestroEnabled()) {
             for (var definition : MaestroClientRegistries.Resource.MUSIC_DEFINITION.listElements()) {
                 if (definition.layer() != layer) continue;
                 if (!definition.test()) continue;
-                return MusicTrack.forDefinition(definition);
+                var track = MusicTrack.fromDefinition(definition);
+                if (track.canBeSelected()) return track;
             }
         }
-        if (ClientConfig.isVanillaEnabled()) {
-            return layer == MusicLayerEnum.UNDERSCORE
-                    ? MusicTrack.forVanilla(client.getSituationalMusic())
-                    : null;
+
+        if (ClientConfig.isVanillaEnabled() && layer == MusicLayerEnum.UNDERSCORE) {
+            var track = MusicTrack.fromVanilla(client.getSituationalMusic());
+            if (track.canBeSelected()) return track;
         }
+
         return null;
     }
 }

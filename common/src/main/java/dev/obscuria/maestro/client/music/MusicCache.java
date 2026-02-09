@@ -30,7 +30,16 @@ public final class MusicCache {
         return track;
     }
 
+    public static MusicTrack getTrack(MusicDefinition definition) {
+        var music = getMusic(definition);
+        if (TRACKS.containsKey(music)) return TRACKS.get(music);
+        var track = new MusicTrack(music, definition);
+        TRACKS.put(music, track);
+        return track;
+    }
+
     public static void clear() {
+        TRACKS.values().forEach(MusicTrack::terminate);
         CACHE.clear();
         TRACKS.clear();
     }

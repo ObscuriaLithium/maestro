@@ -1,33 +1,33 @@
 package dev.obscuria.maestro.client.music.player;
 
 import lombok.Getter;
-import net.minecraft.sounds.Music;
 import org.jetbrains.annotations.Nullable;
 
 public final class MusicLayer {
 
-    @Getter private @Nullable MusicTrack currentTrack;
+    @Getter private @Nullable MusicTrack activeTrack;
 
-    public void tick(boolean suppressed) {
-        if (currentTrack == null) return;
-        this.currentTrack.markActive();
-        this.currentTrack.setSuppressed(suppressed);
+    public void tick(boolean suppressedByHigherLayer) {
+        if (activeTrack == null) return;
+        this.activeTrack.onLayerTick();
+        this.activeTrack.setSuppressed(suppressedByHigherLayer);
     }
 
-    public void setTrack(@Nullable MusicTrack track) {
-        this.currentTrack = track;
+    public void select(@Nullable MusicTrack track) {
+        if (activeTrack == track) return;
+        this.activeTrack = track;
+        if (track == null) return;
+        track.onAssigned();
     }
 
-    public void kill() {
-        if (currentTrack != null) currentTrack.kill();
-        this.currentTrack = null;
+    public void stop(MusicStopReason reason) {
+        if (activeTrack != null) {
+            activeTrack.stop(reason);
+            activeTrack = null;
+        }
     }
 
-    public boolean isPlaying(Music music) {
-        return currentTrack != null && currentTrack.getMusic() == music;
-    }
-
-    public boolean isPlaying() {
-        return currentTrack != null;
+    public boolean isActive() {
+        return activeTrack != null;
     }
 }

@@ -1,0 +1,4 @@
+- Added the `cooldown_seconds` option to music definitions.
+- Added the `occupy_layer_during_cooldown` option to music definitions.
+- Added the `reset_cooldown_on_reactivation` option to music definitions.
+- Improved the entity condition: it can now detect multiple entities and require a specific number of matches.

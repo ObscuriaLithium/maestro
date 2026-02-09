@@ -1,6 +1,5 @@
-package dev.obscuria.maestro.client.sound;
+package dev.obscuria.maestro.client.music.player;
 
-import dev.obscuria.maestro.client.music.player.MusicTrack;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundSource;
@@ -8,16 +7,20 @@ import net.minecraft.util.Mth;
 
 public final class MusicSoundInstance extends AbstractTickableSoundInstance {
 
-    private MusicTrack track;
-    private boolean fadeOut;
+    private static final float FADE_STEP = 0.01f;
+
+    private final MusicTrack track;
+    private boolean fadingOut;
 
     public MusicSoundInstance(MusicTrack track) {
         super(track.getMusic().getEvent().value(), SoundSource.MUSIC, SoundInstance.createUnseededRandom());
         this.track = track;
+
         this.attenuation = Attenuation.NONE;
-        this.looping = true;
+        this.looping = track.cooldownTicks == 0;
         this.relative = true;
         this.volume = 0.1f;
+
         this.x = 0;
         this.y = 0;
         this.z = 0;
@@ -25,16 +28,23 @@ public final class MusicSoundInstance extends AbstractTickableSoundInstance {
 
     @Override
     public void tick() {
-        var nextVolume = fadeOut || track.suppressed() ? volume - 0.01f : volume + 0.01f;
-        this.volume = Mth.clamp(nextVolume, 0f, 1f);
-        if (fadeOut && volume <= 0f) stop();
+        float target = fadingOut
+                || track.getState().suppressed
+                ? volume - FADE_STEP
+                : volume + FADE_STEP;
+
+        volume = Mth.clamp(target, 0f, 1f);
+
+        if (fadingOut && volume <= 0f) {
+            stop();
+        }
     }
 
     public void fadeIn() {
-        this.fadeOut = false;
+        fadingOut = false;
     }
 
     public void fadeOut() {
-        this.fadeOut = true;
+        fadingOut = true;
     }
 }

@@ -13,7 +13,10 @@ public record MusicDefinition(
         int priority,
         MusicLayerEnum layer,
         ResourceLocation soundEvent,
-        MusicCondition condition
+        MusicCondition condition,
+        int cooldownSeconds,
+        boolean occupyLayerDuringCooldown,
+        boolean resetCooldownOnReactivation
 ) implements Comparable<MusicDefinition> {
 
     public static final Codec<MusicDefinition> CODEC;
@@ -33,7 +36,10 @@ public record MusicDefinition(
                 Codec.INT.fieldOf("priority").forGetter(MusicDefinition::priority),
                 MusicLayerEnum.CODEC.fieldOf("layer").forGetter(MusicDefinition::layer),
                 ResourceLocation.CODEC.fieldOf("sound_event").forGetter(MusicDefinition::soundEvent),
-                MusicCondition.CODEC.fieldOf("condition").forGetter(MusicDefinition::condition)
+                MusicCondition.CODEC.fieldOf("condition").forGetter(MusicDefinition::condition),
+                Codec.INT.optionalFieldOf("cooldown_seconds", 0).forGetter(MusicDefinition::cooldownSeconds),
+                Codec.BOOL.optionalFieldOf("occupy_layer_during_cooldown", true).forGetter(MusicDefinition::occupyLayerDuringCooldown),
+                Codec.BOOL.optionalFieldOf("reset_cooldown_on_reactivation", false).forGetter(MusicDefinition::resetCooldownOnReactivation)
         ).apply(codec, MusicDefinition::new));
     }
 
