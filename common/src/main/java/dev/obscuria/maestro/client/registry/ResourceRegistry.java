@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.compress.utils.Lists;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -29,6 +30,10 @@ public class ResourceRegistry<T> {
 
     public Codec<T> byNameCodec() {
         return ResourceLocation.CODEC.flatXmap(this::tryGetElement, this::tryGetKey);
+    }
+
+    public ResourceLocation getKey(T element) {
+        return elementToKey.get(element);
     }
 
     public void onReloadStart() {

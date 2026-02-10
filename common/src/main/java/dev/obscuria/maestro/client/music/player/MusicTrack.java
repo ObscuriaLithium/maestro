@@ -2,6 +2,8 @@ package dev.obscuria.maestro.client.music.player;
 
 import dev.obscuria.maestro.client.music.MusicCache;
 import dev.obscuria.maestro.client.music.MusicDefinition;
+import dev.obscuria.maestro.client.music.MusicLayerEnum;
+import dev.obscuria.maestro.client.registry.MaestroClientRegistries;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.Music;
@@ -9,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class MusicTrack {
 
+    @Getter private final String name;
     @Getter private final Music music;
     @Getter private final double fadeInTime;
     @Getter private final double fadeOutTime;
@@ -27,6 +30,7 @@ public final class MusicTrack {
         this.cooldownTicks = 20 * definition.cooldownSeconds();
         this.occupyLayerDuringDelay = definition.occupyLayerDuringCooldown();
         this.resetDelayOnReactivation = definition.resetCooldownOnReactivation();
+        this.name = "maestro ♪ " + MaestroClientRegistries.Resource.MUSIC_DEFINITION.getKey(definition);
     }
 
     public MusicTrack(Music music, double fadeInTime, double fadeOutTime) {
@@ -36,6 +40,7 @@ public final class MusicTrack {
         this.cooldownTicks = 0;
         this.occupyLayerDuringDelay = false;
         this.resetDelayOnReactivation = false;
+        this.name = "vanilla ♪ " + music.getEvent().value().getLocation();
     }
 
     public static MusicTrack fromVanilla(Music music) {
@@ -51,7 +56,7 @@ public final class MusicTrack {
         return occupyLayerDuringDelay || state.restartDelayTicks <= 0;
     }
 
-    public void onAssigned() {
+    public void onAssigned(MusicLayerEnum layer) {
         state.justAssigned = true;
     }
 
@@ -111,6 +116,10 @@ public final class MusicTrack {
 
     public boolean isPlaying() {
         return isInstanceActive();
+    }
+
+    public float getVolume() {
+        return instance != null ? instance.getInstanceVolume() : 0;
     }
 
     private void startInstance() {

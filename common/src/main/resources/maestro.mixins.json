@@ -8,6 +8,7 @@
     "MixinServerPlayer"
   ],
   "client": [
+    "client.MixinGameRenderer",
     "client.MixinMinecraft",
     "client.MixinSoundManager"
   ],

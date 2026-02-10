@@ -19,7 +19,7 @@ public final class MusicSoundInstance extends AbstractTickableSoundInstance {
         this.attenuation = Attenuation.NONE;
         this.looping = track.cooldownTicks == 0;
         this.relative = true;
-        this.volume = 0.1f;
+        this.volume = 0.01f;
 
         this.x = 0;
         this.y = 0;
@@ -46,5 +46,9 @@ public final class MusicSoundInstance extends AbstractTickableSoundInstance {
 
     public void fadeOut() {
         fadingOut = true;
+    }
+
+    public float getInstanceVolume() {
+        return volume;
     }
 }

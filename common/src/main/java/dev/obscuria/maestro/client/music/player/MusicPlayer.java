@@ -5,6 +5,7 @@ import dev.obscuria.maestro.client.music.MusicLayerEnum;
 import dev.obscuria.maestro.client.registry.MaestroClientRegistries;
 import dev.obscuria.maestro.config.ClientConfig;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.Musics;
@@ -15,8 +16,8 @@ public final class MusicPlayer extends MusicManager {
     private static final int REEVALUATE_INTERVAL_TICKS = 20;
 
     private final Minecraft client;
-    private final MusicLayer layerEncounter = new MusicLayer();
-    private final MusicLayer layerUnderscore = new MusicLayer();
+    private final MusicLayer layerEncounter = new MusicLayer(MusicLayerEnum.ENCOUNTER);
+    private final MusicLayer layerUnderscore = new MusicLayer(MusicLayerEnum.UNDERSCORE);
 
     private int tickCount;
 
@@ -67,6 +68,18 @@ public final class MusicPlayer extends MusicManager {
     public boolean isPlayingMusic(Music music) {
         if (music == Musics.UNDER_WATER) return false;
         return MusicCache.getTrack(music).isPlaying();
+    }
+
+    public void debugRenderer(GuiGraphics graphics) {
+        if (!ClientConfig.isDebugOverlayEnabled()) return;
+        var maxWidth = 0;
+        var lines = 2;
+        maxWidth = Math.max(maxWidth, layerEncounter.debugPrepare(client.font));
+        maxWidth = Math.max(maxWidth, layerUnderscore.debugPrepare(client.font));
+        graphics.fill(4, 4, 10 + maxWidth, 8 + lines * 11, 0xAA000000);
+        var y = 8;
+        y += layerEncounter.debugRender(graphics, client.font, 8, y);
+        y += layerUnderscore.debugRender(graphics, client.font, 8, y);
     }
 
     private @Nullable MusicTrack resolveTrack(MusicLayerEnum layer) {
