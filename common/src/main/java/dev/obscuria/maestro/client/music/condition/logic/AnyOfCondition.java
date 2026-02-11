@@ -1,7 +1,8 @@
-package dev.obscuria.maestro.client.music.condition;
+package dev.obscuria.maestro.client.music.condition.logic;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.obscuria.maestro.client.music.condition.MusicCondition;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;

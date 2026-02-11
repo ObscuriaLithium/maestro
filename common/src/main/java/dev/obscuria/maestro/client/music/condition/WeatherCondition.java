@@ -11,6 +11,7 @@ import java.util.Optional;
 public record WeatherCondition(
         Optional<Boolean> isRaining,
         Optional<Boolean> isSnowing,
+        Optional<Boolean> isSandstorm,
         Optional<Boolean> isThundering
 ) implements MusicCondition {
 
@@ -26,6 +27,7 @@ public record WeatherCondition(
         if (level == null || player == null) return false;
         if (isRaining.isPresent() && isRaining(level, player) != isRaining.get()) return false;
         if (isSnowing.isPresent() && isSnowing(level, player) != isSnowing.get()) return false;
+        if (isSandstorm.isPresent() && isSandstorm(level, player) != isSandstorm.get()) return false;
         if (isThundering.isPresent() && level.isThundering() != isThundering.get()) return false;
         return true;
     }
@@ -48,10 +50,19 @@ public record WeatherCondition(
         return biome.coldEnoughToSnow(pos);
     }
 
+    private boolean isSandstorm(Level level, Player player) {
+        var pos = player.blockPosition();
+        if (!level.dimensionType().hasSkyLight()) return false;
+        if (!level.isRaining()) return false;
+        var biome = level.getBiome(pos).value();
+        return !biome.hasPrecipitation();
+    }
+
     static {
         CODEC = RecordCodecBuilder.create(codec -> codec.group(
                 Codec.BOOL.optionalFieldOf("is_raining").forGetter(WeatherCondition::isRaining),
                 Codec.BOOL.optionalFieldOf("is_snowing").forGetter(WeatherCondition::isSnowing),
+                Codec.BOOL.optionalFieldOf("is_sandstorm").forGetter(WeatherCondition::isSandstorm),
                 Codec.BOOL.optionalFieldOf("is_thundering").forGetter(WeatherCondition::isThundering)
         ).apply(codec, WeatherCondition::new));
     }

@@ -8,9 +8,10 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 
 public record BiomeCondition(
-        List<ResourceLocation> values
+        Set<ResourceLocation> values
 ) implements MusicCondition {
 
     public static final Codec<BiomeCondition> CODEC;
@@ -29,7 +30,7 @@ public record BiomeCondition(
 
     static {
         CODEC = RecordCodecBuilder.create(codec -> codec.group(
-                ResourceLocation.CODEC.listOf().fieldOf("values").forGetter(BiomeCondition::values)
+                ResourceLocation.CODEC.listOf().xmap(Set::copyOf, List::copyOf).fieldOf("values").forGetter(BiomeCondition::values)
         ).apply(codec, BiomeCondition::new));
     }
 }

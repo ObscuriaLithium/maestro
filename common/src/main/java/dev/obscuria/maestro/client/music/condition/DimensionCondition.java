@@ -7,8 +7,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Set;
+
 public record DimensionCondition(
-        ResourceLocation dimension
+        Set<ResourceLocation> values
 ) implements MusicCondition {
 
     public static final Codec<DimensionCondition> CODEC;
@@ -20,13 +23,13 @@ public record DimensionCondition(
 
     @Override
     public boolean test(@Nullable Level level, @Nullable Player player) {
-        if (level == null || player == null) return false;
-        return level.dimension().location().equals(dimension);
+        if (level == null) return false;
+        return values.contains(level.dimension().location());
     }
 
     static {
         CODEC = RecordCodecBuilder.create(codec -> codec.group(
-                ResourceLocation.CODEC.fieldOf("dimension").forGetter(DimensionCondition::dimension)
+                ResourceLocation.CODEC.listOf().xmap(Set::copyOf, List::copyOf).fieldOf("values").forGetter(DimensionCondition::values)
         ).apply(codec, DimensionCondition::new));
     }
 }

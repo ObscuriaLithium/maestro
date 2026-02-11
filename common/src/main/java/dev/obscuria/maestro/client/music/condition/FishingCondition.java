@@ -6,29 +6,26 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+public record FishingCondition(
+        boolean value
+) implements MusicCondition {
 
-public record NoneOfCondition(List<MusicCondition> terms) implements MusicCondition {
-
-    public static final Codec<NoneOfCondition> CODEC;
+    public static final Codec<FishingCondition> CODEC;
 
     @Override
-    public Codec<NoneOfCondition> codec() {
+    public Codec<FishingCondition> codec() {
         return CODEC;
     }
 
     @Override
     public boolean test(@Nullable Level level, @Nullable Player player) {
-        for (var term : terms) {
-            if (!term.test(level, player)) continue;
-            return false;
-        }
-        return true;
+        if (player == null) return false;
+        return value == (player.fishing != null);
     }
 
     static {
         CODEC = RecordCodecBuilder.create(codec -> codec.group(
-                MusicCondition.CODEC.listOf().fieldOf("terms").forGetter(NoneOfCondition::terms)
-        ).apply(codec, NoneOfCondition::new));
+                Codec.BOOL.optionalFieldOf("value", true).forGetter(FishingCondition::value)
+        ).apply(codec, FishingCondition::new));
     }
 }

@@ -8,15 +8,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public record YLevelCondition(
+public record HeightCondition(
         Optional<Integer> above,
         Optional<Integer> below
 ) implements MusicCondition {
 
-    public static final Codec<YLevelCondition> CODEC;
+    public static final Codec<HeightCondition> CODEC;
 
     @Override
-    public Codec<YLevelCondition> codec() {
+    public Codec<HeightCondition> codec() {
         return CODEC;
     }
 
@@ -28,18 +28,18 @@ public record YLevelCondition(
         return true;
     }
 
-    private boolean isAbove(Player player, int height) {
-        return player.blockPosition().getY() >= height;
+    private boolean isAbove(Player player, int threshold) {
+        return player.blockPosition().getY() >= threshold;
     }
 
-    private boolean isBelow(Player player, int height) {
-        return player.blockPosition().getY() < height;
+    private boolean isBelow(Player player, int threshold) {
+        return player.blockPosition().getY() < threshold;
     }
 
     static {
         CODEC = RecordCodecBuilder.create(codec -> codec.group(
-                Codec.INT.optionalFieldOf("above").forGetter(YLevelCondition::above),
-                Codec.INT.optionalFieldOf("below").forGetter(YLevelCondition::below)
-        ).apply(codec, YLevelCondition::new));
+                Codec.INT.optionalFieldOf("above").forGetter(HeightCondition::above),
+                Codec.INT.optionalFieldOf("below").forGetter(HeightCondition::below)
+        ).apply(codec, HeightCondition::new));
     }
 }

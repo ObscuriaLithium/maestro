@@ -8,6 +8,7 @@
     "MixinServerPlayer"
   ],
   "client": [
+    "client.BossHealthOverlayAccessor",
     "client.MixinGameRenderer",
     "client.MixinMinecraft",
     "client.MixinSoundManager"

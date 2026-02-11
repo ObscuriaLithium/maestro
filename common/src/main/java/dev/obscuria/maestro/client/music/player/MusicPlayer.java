@@ -72,6 +72,8 @@ public final class MusicPlayer extends MusicManager {
 
     public void debugRenderer(GuiGraphics graphics) {
         if (!ClientConfig.isDebugOverlayEnabled()) return;
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, 0, 500);
         var maxWidth = 0;
         var lines = 2;
         maxWidth = Math.max(maxWidth, layerEncounter.debugPrepare(client.font));
@@ -80,6 +82,7 @@ public final class MusicPlayer extends MusicManager {
         var y = 8;
         y += layerEncounter.debugRender(graphics, client.font, 8, y);
         y += layerUnderscore.debugRender(graphics, client.font, 8, y);
+        graphics.pose().popPose();
     }
 
     private @Nullable MusicTrack resolveTrack(MusicLayerEnum layer) {
