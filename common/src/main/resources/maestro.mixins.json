@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.obscuria.maestro.mixin",
+  "refmap": "${mod_id}.refmap.json",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinServerPlayer"
+  ],
+  "client": [
+    "client.BossHealthOverlayAccessor",
+    "client.MixinGameRenderer",
+    "client.MixinMinecraft",
+    "client.MixinSoundManager"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
+

@@ -1,0 +1,3 @@
+- Ported to Minecraft 1.21.1.
+- In-game config now available out of the box.
+- Config options are now localizable.
